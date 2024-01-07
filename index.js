@@ -4,7 +4,7 @@ import markoMiddleware from "@marko/express";
 import compressionMiddleware from "compression";
 
 const devEnv = "development";
-const { NODE_ENV = devEnv, PORT = 3000 } = process.env;
+const { NODE_ENV = devEnv, PORT = 1388 } = process.env;
 console.time("Start");
 
 const app = express()

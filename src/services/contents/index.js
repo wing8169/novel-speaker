@@ -11,7 +11,8 @@ export default async (req, res) => {
     res.send(
       `<div id="content">${text
         .replace("hｔｔｐs://m•ｈetｕshu.com•cｏm", "")
-        .replace("ｍ.hｅtｕsｈu•com•ｃom", "")}</div>`
+        .replace("ｍ.hｅtｕsｈu•com•ｃom", "")
+        .replace("hetushu.com.com", "")}</div>`
     );
   } catch (err) {
     console.log(err);

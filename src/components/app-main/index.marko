@@ -54,9 +54,16 @@
             volume = 1;
           let text = document.getElementById("content")?.innerHTML;
 
+          console.log(voices);
           console.log("text", text);
 
-          speak(text, voices[5], rate, pitch, volume);
+          speak(
+            text,
+            voices?.find((v) => v.lang === "zh-CN"),
+            rate,
+            pitch,
+            volume,
+          );
         } else {
           console.log(" Speech Synthesis Not Supported 😞");
         }

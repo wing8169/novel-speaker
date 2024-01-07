@@ -21,6 +21,7 @@ body {
   color: var(--font-color);
   padding: 0;
   margin: 0;
+  background: black;
 }
 
 * {
@@ -30,7 +31,8 @@ body {
 .container {
   margin-left: auto;
   margin-right: auto;
-  width: 800px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 button::-moz-focus-inner,

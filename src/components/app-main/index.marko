@@ -1,150 +1,107 @@
-<div>
-  <h1>Hello!</h1>
-  <app-sections>
-    <@section title="Buttons">
-      <table>
-        <tr>
-          <td>
-            <b>Primary:</b>
-          </td>
-          <td>
-            <app-button label="small" size="small" variant="primary"/>
-            <app-button label="normal" size="normal" variant="primary"/>
-            <app-button label="large" size="large" variant="primary"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <b>Secondary:&nbsp;</b>
-          </td>
-          <td>
-            <app-button label="small" size="small" variant="secondary"/>
-            <app-button label="normal" size="normal" variant="secondary"/>
-            <app-button label="large" size="large" variant="secondary"/>
-          </td>
-        </tr>
-      </table>
-      <div>
-        <app-button
-          label=`Change Button Size - ${state.buttonSize}`
-          size=state.buttonSize
-          variant="primary"
-          onClick("handleChangeButtonSizeClick")/>
-        <app-button
-          label=`Change Button Variant - ${state.buttonVariant}`
-          variant=state.buttonVariant
-          onClick("handleChangeButtonVariantClick")/>
-      </div>
-    </@section>
-    <@section title="Checkboxes">
-      <p>
-        <app-checkbox
-          label="Foo"
-          data={
-            name: "foo"
+<div class="container">
+  <main>
+    <form id="form" hx-get="/contents" hx-target="#content" hx-swap="outerHTML">
+      <input type="text" name="site">
+      <button>Load Content</button>
+    </form>
+    <button id="speakButton">
+      Speak
+    </button>
+    <button id="cancelButton">
+      Cancel
+    </button>
+    <div id="content">
+      我喜欢吃冰淇淋
+    </div>
+    <script>
+      document.getElementById("cancelButton").addEventListener("click", () => {
+        if ("speechSynthesis" in window) {
+          speechSynthesis.cancel();
+        }
+      });
+      document.getElementById("speakButton").addEventListener("click", () => {
+        function getVoices() {
+          let voices = speechSynthesis.getVoices();
+          if (!voices.length) {
+            // some time the voice will not be initialized so we can call speak with empty string
+            // this will initialize the voices
+            let utterance = new SpeechSynthesisUtterance("");
+            speechSynthesis.speak(utterance);
+            voices = speechSynthesis.getVoices();
           }
-          checked=state.checked.foo
-          onToggle("handleCheckboxToggle")/>
-        <app-checkbox
-          label="Bar"
-          data={
-            name: "bar"
-          }
-          checked=state.checked.bar
-          onToggle("handleCheckboxToggle")/>
-        <app-checkbox
-          label="Baz"
-          data={
-            name: "baz"
-          }
-          checked=state.checked.baz
-          onToggle("handleCheckboxToggle")/>
-      </p>
-      <p>
-        <app-checkbox
-          label="Bar"
-          data={
-            name: "bar"
-          }
-          checked=state.checked.bar
-          onToggle("handleCheckboxToggle")/>
-      </p>
-      <p>
-        <b>Checked</b>:
-        <ul>
-          <for|key, value| in=state.checked>
-            <if(value)>
-              <li>${key}</li>
-            </if>
-          </for>
-        </ul>
-      </p>
-      <p>
-        <app-checkbox
-          label="Foo"
-          checked
-          data={
-            name: "foo"
-          }
-          key="toggleCheckbox"/>
-        <app-button
-          label="Toggle Checkbox"
-          size="small"
-          variant="primary"
-          onClick("handleToggleCheckboxButtonClick")/>
-      </p>
-    </@section>
-    <@section title="Overlays">
-      <app-button
-        label="Show Overlay"
-        variant="primary"
-        onClick("handleShowOverlayButtonClick")/>
-      <app-button
-        label="Show Notification"
-        variant="primary"
-        onClick("handleShowNotificationButtonClick")/>
-      <app-notifications key="notifications"/>
-      <app-overlay
-        onOk("handleOverlayOk")
-        onCancel("handleOverlayCancel")
-        onHide("handleOverlayHide")
-        onShow("handleOverlayShow")
-        key="overlay"
-        visible=state.overlayVisible>
-        <h2>Overlay Demo</h2>
-        This is an overlay!
-      </app-overlay>
-    </@section>
-    <@section title="Tabs">
-      <h3>Static tabs</h3>
-      <app-tabs>
-        <@tab label="Home">Content for Home</@tab>
-        <@tab label="Profile">Content for Profile</@tab>
-        <@tab label="Messages">Content for Messages</@tab>
-      </app-tabs>
-      <h3>Dynamic tabs</h3>
-      <app-tabs>
-        <for|tabIndex, tab| in=state.dynamicTabs>
-          <@tab label=("Tab " + tabIndex)>
-            Content for tab ${tabIndex}: ${tab.timestamp}
-          </@tab>
-        </for>
-      </app-tabs>
-      <app-button label="Add Tab" onClick("handleAddTabButtonClick")/>
-    </@section>
-    <@section title="Miscellaneous">
-      <app-progress-bar>
-        <@step name="contact-info">Contact Info</@step>
-        <@step name="interests">Interests</@step>
-        <@step name="family">Family</@step>
-      </app-progress-bar>
-      <br/>
-      <app-number-spinner/>
-      <br/>
-      <app-state-select/>
-    </@section>
-    <@section title="Fetch data">
-      <app-fetch-data/>
-    </@section>
-  </app-sections>
+          return voices;
+        }
+
+        function speak(text, voice, rate, pitch, volume) {
+          // create a SpeechSynthesisUtterance to configure the how text to be spoken
+          let speakData = new SpeechSynthesisUtterance();
+          speakData.volume = volume; // From 0 to 1
+          speakData.rate = rate; // From 0.1 to 10
+          speakData.pitch = pitch; // From 0 to 2
+          speakData.text = text;
+          speakData.lang = "zh";
+          speakData.voice = voice;
+
+          // pass the SpeechSynthesisUtterance to speechSynthesis.speak to start speaking
+          speechSynthesis.cancel();
+          speechSynthesis.speak(speakData);
+        }
+
+        if ("speechSynthesis" in window) {
+          let voices = getVoices();
+          let rate = 1,
+            pitch = 1,
+            volume = 1;
+          let text = document.getElementById("content")?.innerHTML;
+
+          console.log("text", text);
+
+          speak(text, voices[5], rate, pitch, volume);
+        } else {
+          console.log(" Speech Synthesis Not Supported 😞");
+        }
+      });
+    </script>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    />
+  </main>
 </div>
+style {
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1em, 2vw, 2em);
+    padding: 1em;
+    box-sizing: border-box;
+    min-height: 100vh;
+    width: 100%;
+    gap: 24px;
+  }
+  #content {
+    text-align: center;
+  }
+  button {
+    padding: 8px;
+    font-size: 24px;
+    border-radius: 8px;
+  }
+  #form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  input {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  p {
+    margin: 0;
+  }
+}

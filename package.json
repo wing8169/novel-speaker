@@ -28,7 +28,7 @@
     "build:server": "cross-env NODE_ENV=production vite build --ssr src/index.js",
     "dev": "node --max_old_space_size=400 --enable-source-maps index.js",
     "dev:inspect": "node --inspect --enable-source-maps index.js",
-    "start": "cross-env NODE_ENV=production node --enable-source-maps index.js"
+    "start": "cross-env NODE_ENV=production node --max_old_space_size=400 --enable-source-maps index.js"
   },
   "type": "module"
 }

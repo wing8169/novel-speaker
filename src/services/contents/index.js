@@ -33,6 +33,8 @@ export default async (req, res) => {
       rslt += tmpText;
     }
 
+    await browser.close();
+
     res.send(
       `<div id="content">${rslt
         .replace("hｔｔｐs://m•ｈetｕshu.com•cｏm", "")

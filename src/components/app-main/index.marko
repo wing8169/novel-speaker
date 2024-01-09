@@ -1,9 +1,15 @@
 <div class="container">
   <main>
     <form id="form" hx-get="/contents" hx-target="#content" hx-swap="outerHTML">
-      <input type="text" name="site">
+      <input type="text" name="site" id="site">
       <button>Load Content</button>
     </form>
+    <button id="nextButton">
+      Next
+    </button>
+    <button id="prevButton">
+      Previous
+    </button>
     <button id="speakButton">
       Speak
     </button>
@@ -14,12 +20,7 @@
       我喜欢丝甜甜
     </div>
     <script>
-      document.getElementById("cancelButton").addEventListener("click", () => {
-        if ("speechSynthesis" in window) {
-          speechSynthesis.cancel();
-        }
-      });
-      document.getElementById("speakButton").addEventListener("click", () => {
+      function triggerVoice() {
         function getVoices() {
           let voices = speechSynthesis.getVoices();
           if (!voices.length) {
@@ -67,7 +68,43 @@
         } else {
           console.log(" Speech Synthesis Not Supported 😞");
         }
+      }
+      document.getElementById("nextButton").addEventListener("click", () => {
+        const doc = document.getElementById("site");
+        const url = doc.value;
+        const startIndex = url.lastIndexOf("/") + 1;
+        const endIndex = url.lastIndexOf(".");
+        let curr = +url.slice(startIndex, endIndex);
+        curr++;
+        console.log(curr);
+        // doc.setAttribute(
+        //   "value",
+        //   `https://www.hetushu.com/book/171/${curr}.html`,
+        // );
+        doc.value = `https://www.hetushu.com/book/171/${curr}.html`;
       });
+      document.getElementById("prevButton").addEventListener("click", () => {
+        const doc = document.getElementById("site");
+        const url = doc.value;
+        const startIndex = url.lastIndexOf("/") + 1;
+        const endIndex = url.lastIndexOf(".");
+        let curr = +url.slice(startIndex, endIndex);
+        curr--;
+        console.log(curr);
+        doc.value = `https://www.hetushu.com/book/171/${curr}.html`;
+      });
+      document
+        .getElementById("cancelButton")
+        .addEventListener("click", function () {
+          if ("speechSynthesis" in window) {
+            speechSynthesis.cancel();
+          }
+        });
+      document
+        .getElementById("speakButton")
+        .addEventListener("click", function () {
+          triggerVoice();
+        });
     </script>
     <script
       src="https://unpkg.com/htmx.org@1.9.10"
@@ -91,6 +128,8 @@ style {
   }
   #content {
     text-align: center;
+    color: white;
+    font-size: 30px;
   }
   button {
     padding: 8px;

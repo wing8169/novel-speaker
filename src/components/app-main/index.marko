@@ -81,7 +81,7 @@
         //   "value",
         //   `https://www.hetushu.com/book/171/${curr}.html`,
         // );
-        doc.value = `https://www.hetushu.com/book/171/${curr}.html`;
+        doc.value = `${url.slice(0, startIndex)}/${curr}.html`;
       });
       document.getElementById("prevButton").addEventListener("click", () => {
         const doc = document.getElementById("site");

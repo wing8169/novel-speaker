@@ -81,7 +81,7 @@
         //   "value",
         //   `https://www.hetushu.com/book/171/${curr}.html`,
         // );
-        doc.value = `${url.slice(0, startIndex)}/${curr}.html`;
+        doc.value = `${url.slice(0, startIndex)}${curr}.html`;
       });
       document.getElementById("prevButton").addEventListener("click", () => {
         const doc = document.getElementById("site");
@@ -91,7 +91,7 @@
         let curr = +url.slice(startIndex, endIndex);
         curr--;
         console.log(curr);
-        doc.value = `https://www.hetushu.com/book/171/${curr}.html`;
+        doc.value = `${url.slice(0, startIndex)}${curr}.html`;
       });
       document
         .getElementById("cancelButton")

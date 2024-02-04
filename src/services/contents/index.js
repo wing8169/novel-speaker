@@ -18,8 +18,24 @@ export default async (req, res) => {
     // Navigate the page to a URL
     await page.goto(site);
     await delay(2000);
-    const textSelector = await page.waitForSelector("#content");
-    const text = await textSelector?.evaluate((el) => el.textContent);
+
+    // handle uukanshu
+    if (site.includes("uukanshu")) {
+      const textSelector = await page.waitForSelector("#contentbox");
+      const text = await textSelector?.evaluate((el) => el.textContent);
+      await browser.close();
+
+      res.send(
+        `<div id="content">${text
+          .replace(/hｔｔｐs:\/\/m•ｈetｕshu.com•cｏm/g, "")
+          .replace(/ｍ.hｅtｕsｈu•com•ｃom/g, "")
+          .replace(/hetushu.com.com/g, "")
+          .replace(/&nbsp;/g, "")
+          .replace(/\xA0/g, " ")
+          .replace(/UU看书 wｗw.uukanshu．net/g, "")}</div>`
+      );
+      return;
+    }
 
     const divs = await page.$$("#content div");
     let rslt = "";
@@ -37,9 +53,12 @@ export default async (req, res) => {
 
     res.send(
       `<div id="content">${rslt
-        .replace("hｔｔｐs://m•ｈetｕshu.com•cｏm", "")
-        .replace("ｍ.hｅtｕsｈu•com•ｃom", "")
-        .replace("hetushu.com.com", "")}</div>`
+        .replace(/hｔｔｐs:\/\/m•ｈetｕshu.com•cｏm/g, "")
+        .replace(/ｍ.hｅtｕsｈu•com•ｃom/g, "")
+        .replace(/hetushu.com.com/g, "")
+        .replace(/&nbsp;/g, "")
+        .replace(/\xA0/g, " ")
+        .replace(/UU看书 wｗw.uukanshu．net/g, "")}</div>`
     );
   } catch (err) {
     console.log(err);

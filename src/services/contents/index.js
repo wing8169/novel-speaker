@@ -32,7 +32,8 @@ export default async (req, res) => {
           .replace(/hetushu.com.com/g, "")
           .replace(/&nbsp;/g, "")
           .replace(/\xA0/g, " ")
-          .replace(/UU看书 wｗw.uukanshu．net/g, "")}</div>`
+          .replace(/UU看书 wｗw.uukanshu．net/g, "")
+          .replace(/UU看书wｗw.uukanshu．nｅt/g, "")}</div>`
       );
       return;
     }
@@ -58,7 +59,8 @@ export default async (req, res) => {
         .replace(/hetushu.com.com/g, "")
         .replace(/&nbsp;/g, "")
         .replace(/\xA0/g, " ")
-        .replace(/UU看书 wｗw.uukanshu．net/g, "")}</div>`
+        .replace(/UU看书 wｗw.uukanshu．net/g, "")
+        .replace(/UU看书wｗw.uukanshu．nｅt/g, "")}</div>`
     );
   } catch (err) {
     console.log(err);
